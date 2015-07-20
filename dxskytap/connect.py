@@ -42,8 +42,13 @@ except ImportError:
 
 from base64 import b64encode
 import httplib2
-import urlparse
-import urllib
+try:
+    import urllib.parse as urlparse
+    from urllib.parse import urlencode, quote as urlquote
+except ImportError:
+    import urlparse
+    from urllib import urlencode, quote as urlquote
+
 import signal
 import re
 import logging
@@ -110,9 +115,9 @@ class Connect(object):
         This base path will be prepended to the URL if the base path
         exists.
         """
-        path = urllib.quote(resource)
+        path = urlquote(resource)
         if args:
-            path += u"?" + urllib.urlencode(args)
+            path += u"?" + urlencode(args)
 
         parts = [x for x in [self.path, path] if x is not None]
         full_path = u"/".join(parts)
