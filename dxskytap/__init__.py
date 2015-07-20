@@ -86,7 +86,7 @@ class Skytap(object):
         :username: authenticating username
         :password: username's password
         :request_timeout: throw a TimeoutException if Skytap doesn't respond
-            within this window. Default: 5 minutes
+            within this window. Not supported on Windows. Default: 5 minutes
         '''
         if username is None and password is None:
             config = ConfigParser.ConfigParser()

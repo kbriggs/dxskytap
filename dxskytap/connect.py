@@ -44,6 +44,7 @@ from base64 import b64encode
 import httplib2
 import urlparse
 import urllib
+import sys
 import signal
 import re
 import logging
@@ -191,14 +192,17 @@ class Connect(object):
 
         tries_remaining = 3
         resp = None
+        have_sigalrm = sys.platform != 'win32'
         while resp is None and tries_remaining > 0:
             tries_remaining = tries_remaining - 1
             try:
-                signal.signal(signal.SIGALRM, _request_timeout_handler)
-                signal.alarm(self._request_timeout)
+                if have_sigalrm:
+                    signal.signal(signal.SIGALRM, _request_timeout_handler)
+                    signal.alarm(self._request_timeout)
                 resp, content = self.http.request(url, method.upper(),
                     body=body, headers=headers)
-                signal.alarm(0)
+                if have_sigalrm:
+                    signal.alarm(0)
             except TimeoutException:
                 resp = None
 
