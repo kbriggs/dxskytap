@@ -131,9 +131,10 @@ class Connect(object):
         """
         if headers is None:
             headers = {}
-        encoded_auth = b64encode('%s:%s' % (self.username, self.password))
+        encoded_auth = b64encode(
+            ('%s:%s' % (self.username, self.password)).encode('utf-8'))
         headers['User-Agent'] = 'Basic Agent'
-        headers['Authorization'] = 'Basic %s' % (encoded_auth)
+        headers['Authorization'] = 'Basic %s' % (encoded_auth.decode('utf-8'))
         
         if method in ["post", "put"]:
             headers['Content-Type'] = 'application/json'
